@@ -4,11 +4,11 @@ public class Booking {
     private String name;
     private String date;
     private String time;
-    private String table;
+    private short table;
     private String details;
-    private byte numOfPeople;
+    private short numOfPeople;
 
-    public Booking(String name, String date, String time, String table, String details, byte numOfPeople){
+    public Booking(String name, String date, String time, short table, String details, byte numOfPeople){
         this.name = name;
         this.date = date;
         this.time = time;
@@ -25,13 +25,19 @@ public class Booking {
         return this.date;
     }
 
-    public String getTime(){ return this.time; }
+    public String getTime() {
+        return this.time;
+    }
 
-    public String getTable() { return this.table; }
+    public short getTable() {
+        return this.table;
+    }
 
     public String getDetails(){
         return this.details;
     }
 
-    public byte getNumOfPeople(){ return this.numOfPeople;           }
+    public short getNumOfPeople(){
+        return this.numOfPeople;
+    }
 }
