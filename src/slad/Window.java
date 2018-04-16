@@ -7,8 +7,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class Window extends JFrame {
+import static java.lang.Byte.parseByte;
+import static java.lang.Short.parseShort;
 
+public class Window extends JFrame {
+    private DrawableArray drawableArray = new DrawableArray();
     private class Canvas extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -55,8 +58,20 @@ public class Window extends JFrame {
 
                 int option = JOptionPane.showConfirmDialog(appWindow, message, "Booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
                 if (option == JOptionPane.OK_OPTION) {
-
+                    name = nameField.getText();
+                    day = parseByte(dayField.getText());
+                    month = parseByte(monthField.getText());
+                    year = parseShort(yearField.getText());
+                    hour = parseByte(hourField.getText());
+                    minute = parseByte(minuteField.getText());
+                    table = parseShort(tableField.getText());
+                    numOfPeople = parseShort(numOfPeopleField.getText());
+                    details = detailsField.getText();
+                    String date = day + "/" + month +"/" + year;
+                    String time = hour + ":" + minute;
+                    drawableArray.add(new Booking(name, date, time, table, details, numOfPeople));
                 }
+
             } else if(e.getSource() == removeButton) {
 
             } else if(e.getSource() == sizeReportButton) {

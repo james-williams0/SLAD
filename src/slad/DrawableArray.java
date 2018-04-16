@@ -12,7 +12,6 @@ public class DrawableArray extends ArrayList<Booking> implements Drawable {
         int j = 50;
         int k = 1600;
         int l = 200;
-        int n = 0;
         c.setBackground(Color.GRAY);
         if(size() > 0) {
             for(Booking booking : this) {

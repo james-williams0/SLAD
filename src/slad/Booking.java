@@ -8,7 +8,7 @@ public class Booking {
     private String details;
     private short numOfPeople;
 
-    public Booking(String name, String date, String time, short table, String details, byte numOfPeople){
+    public Booking(String name, String date, String time, short table, String details, short numOfPeople){
         this.name = name;
         this.date = date;
         this.time = time;
