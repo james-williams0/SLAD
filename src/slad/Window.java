@@ -6,6 +6,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
 
 import static java.lang.Byte.parseByte;
 import static java.lang.Short.parseShort;
@@ -16,6 +17,7 @@ public class Window extends JFrame {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
+            drawableArray.draw(g, canvas);
         }
     }
 
@@ -44,7 +46,7 @@ public class Window extends JFrame {
                 JTextField tableField = new JTextField();
                 JTextField detailsField = new JTextField();
 
-                Object[] message = {
+                Object[] options = {
                         "Name:", nameField,
                         "Day:", dayField,
                         "Month:", monthField,
@@ -56,7 +58,7 @@ public class Window extends JFrame {
                         "Details:", detailsField,
                 };
 
-                int option = JOptionPane.showConfirmDialog(appWindow, message, "Booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+                int option = JOptionPane.showConfirmDialog(appWindow, options, "Add booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
                 if (option == JOptionPane.OK_OPTION) {
                     name = nameField.getText();
                     day = parseByte(dayField.getText());
@@ -70,14 +72,64 @@ public class Window extends JFrame {
                     String date = day + "/" + month +"/" + year;
                     String time = hour + ":" + minute;
                     drawableArray.add(new Booking(name, date, time, table, details, numOfPeople));
+                    canvas.repaint();
+                    removeButton.setEnabled(true);
+                    emptyButton.setEnabled(true);
                 }
 
             } else if(e.getSource() == removeButton) {
+                String name;
+                byte day;
+                byte month;
+                short year;
+                ArrayList<Booking> toBeRemoved = new ArrayList<>();
 
+                JTextField nameField = new JTextField();
+                JTextField dayField = new JTextField();
+                JTextField monthField = new JTextField();
+                JTextField yearField = new JTextField();
+
+                Object[] options = {
+                        "Name:", nameField,
+                        "Day:", dayField,
+                        "Month:", monthField,
+                        "Year:", yearField,
+                };
+
+                int option = JOptionPane.showConfirmDialog(appWindow, options, "Delete booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+                if(option == JOptionPane.OK_OPTION) {
+                    name = nameField.getText();
+                    day = parseByte(dayField.getText());
+                    month = parseByte(monthField.getText());
+                    year = parseShort(yearField.getText());
+                    String date = day + "/" + month + "/" + year;
+                    for(Booking booking : drawableArray) {
+                        if(booking.getName().equals(name) && booking.getDate().equals(date)) {
+                            toBeRemoved.add(booking);
+                        }
+                    }
+                    drawableArray.removeAll(toBeRemoved);
+                    canvas.repaint();
+                    if(drawableArray.size() == 0) {
+                        removeButton.setEnabled(false);
+                        emptyButton.setEnabled(false);
+                    }
+                }
             } else if(e.getSource() == sizeReportButton) {
-
+                int numOfBookings = drawableArray.size();
+                if(numOfBookings == 1) {
+                    messageTextField.append("Currently " + numOfBookings + " booking.\n");
+                } else {
+                    messageTextField.append("Currently " + numOfBookings + " bookings.\n");
+                }
             } else if(e.getSource() == emptyButton) {
-
+                int option = JOptionPane.showConfirmDialog(appWindow, "Are you sure you want to delete all bookings from the system?", "Delete booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+                if (option == JOptionPane.OK_OPTION) {
+                    drawableArray.removeAll(drawableArray);
+                    canvas.repaint();
+                    removeButton.setEnabled(false);
+                    emptyButton.setEnabled(false);
+                }
             }
         }
     }
@@ -151,7 +203,6 @@ public class Window extends JFrame {
             //onStack = true;
             canvas.repaint();
         }
-
     }
 
     private Canvas canvas;
@@ -165,13 +216,13 @@ public class Window extends JFrame {
 
     public Window() {
 
-        appWindow = new JFrame("ADT GUI Example program");
+        appWindow = new JFrame("Restaurant bookings");
         appWindow.setLayout(new BorderLayout());
         appWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         canvas = new Canvas();
         appWindow.add(canvas, BorderLayout.CENTER);
-        BorderSet(canvas, "ADT");
+        BorderSet(canvas, "Bookings");
         canvas.setPreferredSize(new Dimension(500, 500));
 
         JPanel tools = new JPanel();
