@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import static java.awt.Font.PLAIN;
 
 public class DrawableArray extends ArrayList<Booking> implements Drawable {
+
+    public static final int MAX_BOOKINGS = 10;  //size of Array
     Font font = new Font("Monospaced", PLAIN, 16);
     public void draw(Graphics g, JPanel c){
+        this.sort();
         int i = 100; //  Default x and y coordinates, width and height values, and a tracker for what node is currently being drawn.
         int j = 50;
         int k = 1600;
@@ -33,6 +36,29 @@ public class DrawableArray extends ArrayList<Booking> implements Drawable {
                 g.drawString("Details: " + booking.getDetails(), i + 20, j + 15);
                 j += 18;
             }
+        }
+    }
+
+    public boolean isFull(){    //Checks if list is full
+        if(this.size() != MAX_BOOKINGS){
+            return false;
+        }
+        return true;
+    }
+
+    public void sort(){
+        if(this.size() > 1){
+            for(int i = 0; i<this.size(); i++){
+                for(int j = this.size()-1; j > i; j--){
+                    Booking bigger = this.get(i);
+                    Booking smaller = this.get(j);
+                    if(this.get(i).dateSort(this.get(i), this.get(j)) == 1){
+                        this.set(j, bigger);
+                        this.set(i, smaller);
+                    }
+                }
+            }
+
         }
     }
 }
