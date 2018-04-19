@@ -27,10 +27,11 @@ public class Window extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == addButton) {
                 boolean invalidInput = true;
+                int leapYearModifier = 4;
                 while(true) {
                     String name;
                     byte day;
-                    byte month;
+                    byte month = 0;
                     short year = 0;
                     byte hour;
                     byte minute;
@@ -71,19 +72,9 @@ public class Window extends JFrame {
                         name = nameField.getText();
                         details = detailsField.getText();
                         try {
-                            day = parseByte(dayField.getText());
-                            if(day > 0 && day <= 31) {
-                                if(day <= 9) {
-                                    dayWithZero = "0" + day;
-                                } else {
-                                    dayWithZero = Byte.toString(day);
-                                }
-                            } else {
-                                messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
-                                invalidInput = true;
-                            }
+                            year = parseShort(yearField.getText());
                         } catch(NumberFormatException exc) {
-                            messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
+                            messageTextField.append("Year is invalid, please type only the current year.");
                             invalidInput = true;
                         }
                         try {
@@ -103,9 +94,19 @@ public class Window extends JFrame {
                             invalidInput = true;
                         }
                         try {
-                            year = parseShort(yearField.getText());
+                            day = parseByte(dayField.getText());
+                            if((day > 0 && (day <= 31 && (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)) || (day <= 30 && (month == 4 || month == 6 || month == 9 || month == 11)) || (day <= 28 && (month == 2 && year%leapYearModifier != 0)) || (day <= 29 && (month == 2 && year%leapYearModifier == 0)))) {
+                                if(day <= 9) {
+                                    dayWithZero = "0" + day;
+                                } else {
+                                    dayWithZero = Byte.toString(day);
+                                }
+                            } else {
+                                messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
+                                invalidInput = true;
+                            }
                         } catch(NumberFormatException exc) {
-                            messageTextField.append("Year is invalid, please type only the current year.");
+                            messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
                             invalidInput = true;
                         }
                         try {
