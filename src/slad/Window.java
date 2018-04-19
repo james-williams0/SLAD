@@ -26,55 +26,142 @@ public class Window extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == addButton) {
-                String name;
-                byte day;
-                byte month;
-                short year;
-                byte hour;
-                byte minute;
-                short table;
-                short numOfPeople;
-                String details;
+                boolean invalidInput = true;
+                while(true) {
+                    String name;
+                    byte day;
+                    byte month;
+                    short year = 0;
+                    byte hour;
+                    byte minute;
+                    short table = 0;
+                    short numOfPeople = 0;
+                    String details;
 
-                JTextField nameField = new JTextField();
-                JTextField dayField = new JTextField();
-                JTextField monthField = new JTextField();
-                JTextField yearField = new JTextField();
-                JTextField hourField = new JTextField();
-                JTextField minuteField = new JTextField();
-                JTextField numOfPeopleField = new JTextField();
-                JTextField tableField = new JTextField();
-                JTextField detailsField = new JTextField();
+                    String dayWithZero = null;
+                    String monthWithZero = null;
 
-                Object[] options = {
-                        "Name:", nameField,
-                        "Day:", dayField,
-                        "Month:", monthField,
-                        "Year:", yearField,
-                        "Hour:", hourField,
-                        "Minute:", minuteField,
-                        "Number of people:", numOfPeopleField,
-                        "Table number:", tableField,
-                        "Details:", detailsField,
-                };
+                    String hourWithZero = null;
+                    String minuteWithZero = null;
 
-                int option = JOptionPane.showConfirmDialog(appWindow, options, "Add booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-                if (option == JOptionPane.OK_OPTION) {
-                    name = nameField.getText();
-                    day = parseByte(dayField.getText());
-                    month = parseByte(monthField.getText());
-                    year = parseShort(yearField.getText());
-                    hour = parseByte(hourField.getText());
-                    minute = parseByte(minuteField.getText());
-                    table = parseShort(tableField.getText());
-                    numOfPeople = parseShort(numOfPeopleField.getText());
-                    details = detailsField.getText();
-                    String date = day + "/" + month +"/" + year;
-                    String time = hour + ":" + minute;
-                    drawableArray.add(new Booking(name, date, time, table, details, numOfPeople));
-                    canvas.repaint();
-                    removeButton.setEnabled(true);
-                    emptyButton.setEnabled(true);
+                    JTextField nameField = new JTextField();
+                    JTextField dayField = new JTextField();
+                    JTextField monthField = new JTextField();
+                    JTextField yearField = new JTextField();
+                    JTextField hourField = new JTextField();
+                    JTextField minuteField = new JTextField();
+                    JTextField numOfPeopleField = new JTextField();
+                    JTextField tableField = new JTextField();
+                    JTextField detailsField = new JTextField();
+
+                    Object[] options = {
+                            "Name:", nameField,
+                            "Day:", dayField,
+                            "Month:", monthField,
+                            "Year:", yearField,
+                            "Hour:", hourField,
+                            "Minute:", minuteField,
+                            "Number of people:", numOfPeopleField,
+                            "Table number:", tableField,
+                            "Details:", detailsField,
+                    };
+
+                    int option = JOptionPane.showConfirmDialog(appWindow, options, "Add booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+                    if (option == JOptionPane.OK_OPTION) {
+                        name = nameField.getText();
+                        details = detailsField.getText();
+                        try {
+                            day = parseByte(dayField.getText());
+                            if(day > 0 && day <= 31) {
+                                if(day <= 9) {
+                                    dayWithZero = "0" + day;
+                                } else {
+                                    dayWithZero = Byte.toString(day);
+                                }
+                            } else {
+                                messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
+                                invalidInput = true;
+                            }
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
+                            invalidInput = true;
+                        }
+                        try {
+                            month = parseByte(monthField.getText());
+                            if(month <= 12 && month >= 1) {
+                                if(month <= 9) {
+                                    monthWithZero = "0" + month;
+                                } else {
+                                    monthWithZero = Byte.toString(month);
+                                }
+                            } else {
+                                messageTextField.append("Month is invalid, please type only one number in the range 1-12 inclusive.");
+                                invalidInput = true;
+                            }
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Month is invalid, please type only one number in the range 1-12 inclusive.");
+                            invalidInput = true;
+                        }
+                        try {
+                            year = parseShort(yearField.getText());
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Year is invalid, please type only the current year.");
+                            invalidInput = true;
+                        }
+                        try {
+                            hour = parseByte(hourField.getText());
+                            if(hour <= 23 && hour >= 0) {
+                                if(hour <= 9) {
+                                    hourWithZero = "0" + hour;
+                                } else {
+                                    hourWithZero = Byte.toString(hour);
+                                }
+                            } else {
+                                messageTextField.append("Hour is invalid, please type only one number in the range 0-23.");
+                                invalidInput = true;
+                            }
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Hour is invalid, please type only one number in the range 0-23.");
+                            invalidInput = true;
+                        }
+                        try {
+                            minute = parseByte(minuteField.getText());
+                            if(minute <= 59 && minute >= 0) {
+                                if(minute <= 9) {
+                                    minuteWithZero = "0" + minute;
+                                } else {
+                                    minuteWithZero = Byte.toString(minute);
+                                }
+                            } else {
+                                messageTextField.append("Minute is invalid, please type only one number in the range 0-59.");
+                                invalidInput = true;
+                            }
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Minute is invalid, please type only one number in the range 0-59.");
+                            invalidInput = true;
+                        }
+                        try {
+                            table = parseShort(tableField.getText());
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Table number is invalid, please type only the number of the table you wish to book for this group.");
+                            invalidInput = true;
+                        }
+                        try {
+                            numOfPeople = parseShort(numOfPeopleField.getText());
+                        } catch(NumberFormatException exc) {
+                            messageTextField.append("Number of people is invalid, please type only the number of people in the group.");
+                            invalidInput = true;
+                        }
+                        if(!invalidInput) {
+                            String date = dayWithZero + "/" + monthWithZero + "/" + year;
+                            String time = hourWithZero + ":" + minuteWithZero;
+                            drawableArray.add(new Booking(name, date, time, table, details, numOfPeople));
+                            canvas.repaint();
+                            removeButton.setEnabled(true);
+                            emptyButton.setEnabled(true);
+                            break;
+                        }
+                    }
                 }
 
             } else if(e.getSource() == removeButton) {
