@@ -26,9 +26,9 @@ public class Window extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == addButton) {
-                boolean invalidInput = true;
+                boolean invalidInput = false;
                 int leapYearModifier = 4;
-                while(true) {
+                while(!invalidInput) {
                     String name;
                     byte day;
                     byte month = 0;
@@ -69,18 +69,26 @@ public class Window extends JFrame {
 
                     int option = JOptionPane.showConfirmDialog(appWindow, options, "Add booking", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
                     if (option == JOptionPane.OK_OPTION) {
+                        
                         name = nameField.getText();
+                        if(name.equals(null) || name.equals("")) {
+                            messageTextField.append("Fill in the name field with the customer's name.");
+                            invalidInput = true;
+                        }
+                        
                         details = detailsField.getText();
+                        
                         try {
-                            year = parseShort(yearField.getText());
-                        } catch(NumberFormatException exc) {
+                            year = Short.parseShort(yearField.getText());
+                        } catch(NumberFormatException a) {
                             messageTextField.append("Year is invalid, please type only the current year.");
                             invalidInput = true;
                         }
+                        
                         try {
-                            month = parseByte(monthField.getText());
+                            month = Byte.parseByte(monthField.getText());
                             if(month <= 12 && month >= 1) {
-                                if(month <= 9) {
+                                if(month < 10) {
                                     monthWithZero = "0" + month;
                                 } else {
                                     monthWithZero = Byte.toString(month);
@@ -89,14 +97,14 @@ public class Window extends JFrame {
                                 messageTextField.append("Month is invalid, please type only one number in the range 1-12 inclusive.");
                                 invalidInput = true;
                             }
-                        } catch(NumberFormatException exc) {
+                        } catch(NumberFormatException a) {
                             messageTextField.append("Month is invalid, please type only one number in the range 1-12 inclusive.");
-                            invalidInput = true;
                         }
+                        
                         try {
-                            day = parseByte(dayField.getText());
+                            day = Byte.parseByte(dayField.getText());
                             if((day > 0 && (day <= 31 && (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)) || (day <= 30 && (month == 4 || month == 6 || month == 9 || month == 11)) || (day <= 28 && (month == 2 && year%leapYearModifier != 0)) || (day <= 29 && (month == 2 && year%leapYearModifier == 0)))) {
-                                if(day <= 9) {
+                                if(day < 10) {
                                     dayWithZero = "0" + day;
                                 } else {
                                     dayWithZero = Byte.toString(day);
@@ -105,10 +113,11 @@ public class Window extends JFrame {
                                 messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
                                 invalidInput = true;
                             }
-                        } catch(NumberFormatException exc) {
+                        } catch(NumberFormatException a) {
                             messageTextField.append("Day is invalid, please type only one number in the range 1-31 inclusive.");
                             invalidInput = true;
                         }
+                        
                         try {
                             hour = parseByte(hourField.getText());
                             if(hour <= 23 && hour >= 0) {
@@ -125,6 +134,7 @@ public class Window extends JFrame {
                             messageTextField.append("Hour is invalid, please type only one number in the range 0-23.");
                             invalidInput = true;
                         }
+                        
                         try {
                             minute = parseByte(minuteField.getText());
                             if(minute <= 59 && minute >= 0) {
@@ -141,19 +151,23 @@ public class Window extends JFrame {
                             messageTextField.append("Minute is invalid, please type only one number in the range 0-59.");
                             invalidInput = true;
                         }
+                        
                         try {
                             table = parseShort(tableField.getText());
                         } catch(NumberFormatException exc) {
                             messageTextField.append("Table number is invalid, please type only the number of the table you wish to book for this group.");
                             invalidInput = true;
                         }
+                        
                         try {
                             numOfPeople = parseShort(numOfPeopleField.getText());
                         } catch(NumberFormatException exc) {
                             messageTextField.append("Number of people is invalid, please type only the number of people in the group.");
                             invalidInput = true;
                         }
-                        if(!invalidInput) {
+                        if(invalidInput) {
+                            continue;
+                        } else {
                             String date = dayWithZero + "/" + monthWithZero + "/" + year;
                             String time = hourWithZero + ":" + minuteWithZero;
                             drawableArray.add(new Booking(name, date, time, table, details, numOfPeople));
@@ -162,6 +176,8 @@ public class Window extends JFrame {
                             emptyButton.setEnabled(true);
                             break;
                         }
+                    } else {
+                        break;
                     }
                 }
 
