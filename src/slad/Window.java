@@ -5,7 +5,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.ArrayList;
 
 import static java.lang.Byte.parseByte;
@@ -21,7 +20,7 @@ public class Window extends JFrame {
         }
     }
 
-    private class ADTActionListener implements ActionListener {
+    private class FunctionActionListener implements ActionListener {
         int integerValue;
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -238,6 +237,17 @@ public class Window extends JFrame {
         }
     }
 
+    private void borderSet(JComponent uiItem, String title) {
+        uiItem.setBorder(new TitledBorder(new EtchedBorder(), title));
+    }
+
+    private void mediumButton(JButton aButton) {
+        aButton.setPreferredSize(new Dimension(160, 40));
+    }
+
+    /*
+    Code for file loading that was available but not used in this iteration of the product
+
     private class MenuListener implements ActionListener {
         File file;
         JFileChooser fileChooser;
@@ -256,18 +266,6 @@ public class Window extends JFrame {
                 System.exit(0);
             }
         }
-    }
-
-    private void emptyBookings() {
-
-    }
-
-    private void BorderSet(JComponent uiItem, String title) {
-        uiItem.setBorder(new TitledBorder(new EtchedBorder(), title));
-    }
-
-    private void MediumButton(JButton aButton) {
-        aButton.setPreferredSize(new Dimension(160, 40));
     }
 
     void FileLoad(String filePath, File file, boolean custom) {
@@ -308,6 +306,7 @@ public class Window extends JFrame {
             canvas.repaint();
         }
     }
+    */
 
     private Canvas canvas;
     private JPanel selector;
@@ -326,17 +325,17 @@ public class Window extends JFrame {
 
         canvas = new Canvas();
         appWindow.add(canvas, BorderLayout.CENTER);
-        BorderSet(canvas, "Bookings");
+        borderSet(canvas, "Bookings");
         canvas.setPreferredSize(new Dimension(500, 500));
 
         JPanel tools = new JPanel();
         appWindow.add(tools, BorderLayout.LINE_START);
-        BorderSet(tools, "Tools");
+        borderSet(tools, "Tools");
         tools.setPreferredSize(new Dimension(200, 500));
 
         JPanel messages = new JPanel();
         appWindow.add(messages, BorderLayout.PAGE_END);
-        BorderSet(messages, "Messages");
+        borderSet(messages, "Messages");
         messages.setPreferredSize(new Dimension(700, 120));
         messageTextField = new JTextArea();
         JScrollPane scroller = new JScrollPane(messageTextField);
@@ -346,40 +345,42 @@ public class Window extends JFrame {
         JMenuBar menu = new JMenuBar();
         appWindow.add(menu, BorderLayout.PAGE_START);
         JMenu fileMenu = new JMenu("File");
-        loadMenu = new JMenuItem("Load");
+        //loadMenu = new JMenuItem("Load");
         exitMenu = new JMenuItem("Exit");
         menu.add(fileMenu);
-        fileMenu.add(loadMenu);
+        //fileMenu.add(loadMenu);
         fileMenu.add(exitMenu);
+        /*
         MenuListener MenuListenerObj = new MenuListener();
         loadMenu.addActionListener(MenuListenerObj);
         exitMenu.addActionListener(MenuListenerObj);
+        */
 
         JPanel functions = new JPanel();
-        BorderSet(functions, "Functions");
+        borderSet(functions, "Functions");
         functions.setPreferredSize(new Dimension(190, 300));
 
         addButton = new JButton("Add");
-        ADTActionListener adtListenerObj = new ADTActionListener();
+        FunctionActionListener adtListenerObj = new FunctionActionListener();
         addButton.addActionListener(adtListenerObj);
-        MediumButton(addButton);
+        mediumButton(addButton);
         functions.add(addButton, BorderLayout.LINE_START);
 
         removeButton = new JButton("Delete one");
         removeButton.addActionListener(adtListenerObj);
-        MediumButton(removeButton);
+        mediumButton(removeButton);
         removeButton.setEnabled(false);
         functions.add(removeButton, BorderLayout.AFTER_LAST_LINE);
 
         emptyButton = new JButton("Delete all");
         emptyButton.addActionListener(adtListenerObj);
-        MediumButton(emptyButton);
+        mediumButton(emptyButton);
         emptyButton.setEnabled(false);
         functions.add(emptyButton, BorderLayout.AFTER_LAST_LINE);
 
         sizeReportButton = new JButton("Current number of bookings");
         sizeReportButton.addActionListener(adtListenerObj);
-        MediumButton(sizeReportButton);
+        mediumButton(sizeReportButton);
         functions.add(sizeReportButton, BorderLayout.AFTER_LAST_LINE);
 
         tools.add(functions, BorderLayout.AFTER_LAST_LINE);
