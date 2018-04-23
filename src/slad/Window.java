@@ -317,7 +317,7 @@ public class Window extends JFrame {
     */
 
     private Canvas canvas;
-    private JMenuItem loadMenu, exitMenu;
+    private JMenuItem /*loadMenu, */exitMenu;
     private JTextArea messageTextField;
     private JButton emptyButton, addButton, sizeReportButton, removeButton;
 
