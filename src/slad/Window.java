@@ -309,10 +309,8 @@ public class Window extends JFrame {
     */
 
     private Canvas canvas;
-    private JPanel selector;
     private JMenuItem loadMenu, exitMenu;
     private JTextArea messageTextField;
-    private JToggleButton queueStackSelector;
     private JButton emptyButton, addButton, sizeReportButton, removeButton;
 
     private JFrame appWindow;
