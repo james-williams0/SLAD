@@ -153,6 +153,10 @@ public class Window extends JFrame {
                         
                         try {
                             table = parseShort(tableField.getText());
+                            if(table < 1){
+                                messageTextField.append("Table number is invalid, please type only the number of the table you wish to book for this group.");
+                                invalidInput = true;
+                            }
                         } catch(NumberFormatException exc) {
                             messageTextField.append("Table number is invalid, please type only the number of the table you wish to book for this group.");
                             invalidInput = true;
@@ -160,6 +164,10 @@ public class Window extends JFrame {
                         
                         try {
                             numOfPeople = parseShort(numOfPeopleField.getText());
+                            if(numOfPeople < 1){
+                                messageTextField.append("Number of people is invalid, please type only the number of people in the group.");
+                                invalidInput = true;
+                            }
                         } catch(NumberFormatException exc) {
                             messageTextField.append("Number of people is invalid, please type only the number of people in the group.");
                             invalidInput = true;
